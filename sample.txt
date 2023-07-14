@@ -1,0 +1,7 @@
+// memory data file (do not edit the following line - required for mem load use)
+// instance=/rw_function_sv_unit::read_write_txt::write_txt/write_array
+// format=hex addressradix=h dataradix=h version=1.0 wordsperline=1 noaddress
+0a
+0b
+0c
+0d
