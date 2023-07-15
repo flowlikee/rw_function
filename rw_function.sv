@@ -1,3 +1,4 @@
+`define data_width 32
 
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
@@ -21,7 +22,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 class read_write_txt;
 integer WIDTH,DEPTH;
-int my_array_buffer[];
+logic [`data_width-1:0]my_array_buffer[];
 function new(integer width,integer depth);
     this.WIDTH=width;
     this.DEPTH=depth;
@@ -29,42 +30,34 @@ function new(integer width,integer depth);
     $display("WIDTH IS %d,DEPTH IS %d",this.WIDTH,this.DEPTH);
 endfunction
 
-function void write_txt(string file_name,const ref int write_array[]);
-    for (integer i= 0;i<this.DEPTH ;i=i+1) begin
-        my_array_buffer[i]=0;
-        my_array_buffer[i]=write_array[i];
-    end
+function write_txt(string file_name,logic [`data_width-1:0]write_array[]);
     //write data to file
-    $writememh(file_name, my_array_buffer,0);
+    $writememh(file_name,write_array);
     $display("write txt finish!");
 endfunction
 
 function void read_txt(string file_name);
     //read data from file
-    for (integer i= 0;i<this.DEPTH ;i=i+1) begin
-        my_array_buffer[i]=0;
-    end
-    $readmemh(file_name,my_array_buffer,0,3);
+    $readmemh(file_name,my_array_buffer);
     $display("read txt finish!");
 endfunction
 endclass //read_write_txt
 
 module rw_function;
-read_write_txt rw1=new(width,depth);
-integer width=8;
+integer width=`data_width;
 integer depth=40;
-int my_array[]=new[depth];
+read_write_txt rw1=new(width,depth);
+logic [`data_width-1:0]my_array[]=new[depth];
 string file_name="D:/datas/IC_verification_proj/phase_learn/sample.txt";
-logic[7:0] ans;
 initial begin
 for (int i = 0; i < depth; i = i + 1) begin
     my_array[i]=i+10;
     $display(my_array[i]);
 end
 rw1.write_txt(file_name,my_array); 
+rw1.read_txt(file_name);
 for (integer i= 0;i<depth ;i=i+1) begin
         $display("my_array_buffer[%d] is %d",i,rw1.my_array_buffer[i]);
-    end
-rw1.read_txt(file_name);
+end
 end
 endmodule
