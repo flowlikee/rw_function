@@ -61,19 +61,10 @@ for (int i = 0; i < depth; i = i + 1) begin
     my_array[i]=i+10;
     $display(my_array[i]);
 end
-
 rw1.write_txt(file_name,my_array); 
 for (integer i= 0;i<depth ;i=i+1) begin
         $display("my_array_buffer[%d] is %d",i,rw1.my_array_buffer[i]);
     end
-
-// for (int i =0 ; i<4;i=i+1 ) begin
-//     ans=rw1.read_txt(file_name,i);
-//     $display("%2x",ans);
-// end
-
- 
-
+rw1.read_txt(file_name);
 end
-
 endmodule
